@@ -1,0 +1,1 @@
+SELECT * FROM {{ ref('lookup') }} LIMIT 1

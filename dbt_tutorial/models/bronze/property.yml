@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: bronze_sales
+    description: "Selects all columns from fact_sales source"
+    config:
+      materialized: view
+    columns:
+      - name: sales_id
+        description: "Unique identifier for each sale"
+        tests:
+          - not_null
+      - name: gross_amount
+        description: "Total amount before discounts and taxes"
+        tests:
+          - not_null
+          - generic_non_negative
+  - name: bronze_returns
+    description: "Selects all columns from fact_returns source"
+    config:
+      materialized: view
+
+  - name: bronze_customer
+    description: "Selects all columns from dim_customer source"
+    config:
+      materialized: view
+
+  - name: bronze_date
+    description: "Selects all columns from dim_date source"
+    config:
+      materialized: view
+
+  - name: bronze_store
+    description: "Selects all columns from dim_store source"
+    config:
+      materialized: view
+    columns:
+      - name: store_name
+        description: "The name of the store"
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - "MegaMart Manhattan"
+                - "MegaMart Brooklyn"
+                - "MegaMart San Jose"
+              severity: warn
+
+      - name: country
+        tests:
+          - accepted_values:
+              values:
+                - "USA"
+                - "Canada"
+              severity: warn
